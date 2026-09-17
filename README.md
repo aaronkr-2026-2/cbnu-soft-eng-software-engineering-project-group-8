@@ -1,4 +1,4 @@
-# AI-Based Federated Learning System for Student Performance Prediction
+# AI-Based System for Student Performance Prediction
 
 ## Overview
 
