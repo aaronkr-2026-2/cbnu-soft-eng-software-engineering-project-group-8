@@ -4,11 +4,13 @@ Every time you update your project, please make a note of what you did in the `A
 
 ---
 
-## [Milestone name] — [Date]
-**Tool(s) used:**
-**What I asked for:**
-**What I kept as-is:**
-**What I changed or rejected, and why:**
-**Something the AI got wrong that I had to catch:**
+## Initial App — []
+
+- Tool: Chatgpt
+- AI Used: ChatGPT
+Work: Project planning, ML model, Flask API, frontend, and debugging.
+Changes: Simplified the project and fixed API/CORS issues.
+Result: Working student performance prediction MVP.
+- 
 
 ---
