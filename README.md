@@ -82,4 +82,5 @@ AI tools are used for planning, coding assistance, debugging, and documentation.
 **University:** Chungbuk National University
 **Group:** E
 
-* Add team members here
+* Hilal Mohammad
+* Mai van Than 
