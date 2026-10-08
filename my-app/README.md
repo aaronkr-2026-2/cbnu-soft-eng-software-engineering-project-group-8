@@ -72,6 +72,17 @@ Client 3 ─┘
 * [ ] Cloud deployment
 * [ ] Research paper
 
+## Existing Features
+
+- Student performance prediction using machine learning
+- Student information input through the web interface
+- Prediction result displayed to the user
+- React-based frontend
+- Flask backend API
+- Random Forest regression model
+- Student performance dataset integration
+- Frontend and backend communication through API
+
 ## AI-Assisted Development
 
 AI tools are used for planning, coding assistance, debugging, and documentation. All generated code is reviewed, tested, and understood by the project team. An `AI_LOG.md` file will document AI collaboration throughout the project.
