@@ -108,17 +108,3 @@ Start the Flask API with `python backend/app/app.py` from `my-app` after prepari
 
 The frontend defaults to `http://127.0.0.1:5000`. To use another API, set `VITE_API_BASE_URL` in `my-app/.env.local`, then restart Vite (or rebuild for deployment). The API must allow the frontend origin via CORS. Start the frontend with `npm run dev` from `my-app`.
 
-## Local demo login (Node.js)
-
-From `my-app`, run these commands in two terminals:
-
-```sh
-npm run dev:auth
-npm run dev
-```
-
-Open http://localhost:5173 and click **Đăng nhập** in the navigation, or visit `/login`. Use `student@demo.com` / `Student123!`, or click **Điền tài khoản thử**. Successful login returns to the homepage with the demo user's name and a logout button. Reloading restores the session through `GET /api/auth/me`.
-
-The dependency-free Node.js server listens on 127.0.0.1:3001; Vite proxies `/api/auth` to it. APIs: `POST /api/auth/login` (JSON email/password), `GET /api/auth/me`, `POST /api/auth/logout`. Cookies are HttpOnly and SameSite=Strict, and expire after eight hours. Sessions and the fake account use memory; restarting the server clears sessions. Login attempts are limited to 10 per minute per address. Run `npm run test:auth` for API integration tests.
-
-This is a local demo, with no database or registration. The existing Flask prediction API remains separate on port 5000. Deployment requires an HTTPS same-origin `/api/auth` reverse proxy, `NODE_ENV=production`, and `FRONTEND_ORIGIN` set to the actual website origin.
