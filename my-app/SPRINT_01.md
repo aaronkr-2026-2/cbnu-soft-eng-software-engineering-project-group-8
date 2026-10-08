@@ -103,7 +103,7 @@ The API should convert input data into the same format used during model trainin
 - [ ] Prepare preprocessing logic.
 - [ ] Test prediction using sample student data.
 
-**Assigned to:** Thanh
+**Assigned to:** Hilal
 
 ### Input Validation
 
@@ -112,7 +112,7 @@ The API should convert input data into the same format used during model trainin
 - [ ] Validate G1 and G2 grade values.
 - [ ] Display error messages when input is invalid.
 
-**Assigned to:** Thanh
+**Assigned to:** Hilal
 
 ### Display Prediction Result
 
