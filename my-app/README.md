@@ -131,21 +131,6 @@ This is a local development integration with five requests per minute per addres
 
 Run `npm run test:planner` for validation and HTTP integration tests using mocked OpenAI responses; these make no paid API calls. Official references: [Responses quickstart](https://developers.openai.com/api/docs/quickstart) and [Structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs).
 
-## Local demo login (Node.js)
-
-From `my-app`, run these commands in two terminals:
-
-```sh
-npm run dev:auth
-npm run dev
-```
-
-Open http://localhost:5173 and click **Đăng nhập** in the navigation, or visit `/login`. Use `student@demo.com` / `Student123!`, or click **Điền tài khoản thử**. Successful login returns to the homepage with the demo user's name and a logout button. Reloading restores the session through `GET /api/auth/me`.
-
-The dependency-free Node.js server listens on 127.0.0.1:3001; Vite proxies `/api/auth` to it. APIs: `POST /api/auth/login` (JSON email/password), `GET /api/auth/me`, `POST /api/auth/logout`. Cookies are HttpOnly and SameSite=Strict, and expire after eight hours. Sessions and the fake account use memory; restarting the server clears sessions. Login attempts are limited to 10 per minute per address. Run `npm run test:auth` for API integration tests.
-
-This is a local demo, with no database or registration. The existing Flask prediction API remains separate on port 5000. Deployment requires an HTTPS same-origin `/api/auth` reverse proxy, `NODE_ENV=production`, and `FRONTEND_ORIGIN` set to the actual website origin.
-
 ## Random Forest prediction backend
 
 The Analysis page (`/detect`) now predicts a single profile with **Predict my grade**, and continues to support two-scenario comparison. Both use the same trained Random Forest API. Editing the profile cancels an outstanding single prediction and clears its previous result. This feature runs locally without an OpenAI key or API credits.

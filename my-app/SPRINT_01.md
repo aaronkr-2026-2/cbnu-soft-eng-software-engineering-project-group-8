@@ -1,69 +1,156 @@
-# Sprint 1 — Prediction MVP & Study Planner
+# SPRINT_01.md
 
-Updated: 2026-10-13. Repository: aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8.
+## 1. Sprint Goal
 
-## Goal
-Deliver a reviewable StudentAI demo where students receive a Random Forest G3 estimate, compare study scenarios, and create a seven-day study plan through a separate OpenAI-powered feature.
+Build a working student performance prediction system where users can enter student information through the web interface and receive a predicted final grade from the machine learning model.
 
-## Planning assumptions
-- Proposed duration: two weeks; dates and due date are not set without team agreement.
-- Owners and GitHub assignees remain unassigned until the team agrees responsibilities.
-- Estimates are provisional story points, not elapsed hours; total: 19 points.
-- Scope is based on current local source and recorded validation. Local implementation does not mean merged, deployed or accepted.
-- Existing changes on branch `thanh` must be reviewed separately; this sprint publication does not publish application code.
-- Out of scope: database persistence, registration/roles, federated learning, public deployment and automatic grade-improvement guarantees.
+---
 
-## Current evidence
-- Random Forest: 30 features excluding G1/G2, 519 training / 130 test records; MAE 2.021, RMSE 2.767, R² 0.215.
-- Prediction: 7 Python API and 8 frontend client tests passed; live HTTP through Vite proxy worked.
-- Planner: 12 mocked backend tests passed; no successful live OpenAI generation has been confirmed. Account-side API limits/credits need verification.
-- Build and ESLint passed locally. Browser end-to-end and visual/accessibility acceptance remains open.
-- Results above are previously recorded checks, not tests rerun while writing this plan.
+## 2. Product Backlog
 
-## Sprint backlog
-| ID | Work item | Priority | Estimate | Current state |
-| --- | --- | --- | --- | --- |
-| S1-1 | Deliver the trained Random Forest prediction API | P1 | 3 | Local implementation; acceptance pending |
-| S1-2 | Verify the 30-feature input contract and prediction errors | P1 | 2 | Local implementation; acceptance pending |
-| S1-3 | Complete the prediction and what-if comparison user flow | P1 | 3 | Local implementation; acceptance pending |
-| S1-4 | Validate the OpenAI Study Planner with a real API response | P1 | 3 | Local implementation; live verification blocked |
-| S1-5 | Make model comparison and cross-validation reproducible | P2 | 3 | Scripts need alignment |
-| S1-6 | Verify desktop, mobile and accessible end-to-end flows | P2 | 3 | Browser verification pending |
-| S1-7 | Publish a reproducible sprint demo and reconcile documentation | P1 | 2 | Publication and docs pending |
+| Priority | Backlog Item | Description | Label |
+|---|---|---|---|
+| P1 | Complete Student Input Form | Create a complete form containing all required student information fields from the dataset. | frontend |
+| P1 | Connect Frontend to Flask API | Send student data from the React frontend to the Flask backend using an API request. | frontend, backend |
+| P1 | Integrate Random Forest Model | Load the trained Random Forest Regression model in Flask and generate student grade predictions. | machine-learning, backend |
+| P2 | Add Input Validation | Validate user input before sending data to the prediction API. | frontend, validation |
+| P2 | Display Prediction Result | Show the predicted final grade clearly on the result section of the website. | frontend |
+| P3 | Improve User Interface | Make the prediction page responsive and consistent with the StudentAI homepage design. | UI/UX |
+| P3 | Test Complete Prediction Flow | Test the full process from entering student data to receiving a prediction. | testing |
 
-[Milestone](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/milestone/1) · [Sprint tracker](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/2)
+---
 
-- [#3: Deliver the trained Random Forest prediction API](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/3)
-- [#4: Verify the 30-feature input contract and prediction errors](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/4)
-- [#5: Complete the prediction and what-if comparison user flow](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/5)
-- [#6: Validate the OpenAI Study Planner with a real API response](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/6)
-- [#7: Make model comparison and cross-validation reproducible](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/7)
-- [#8: Verify desktop, mobile and accessible end-to-end flows](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/8)
-- [#9: Publish a reproducible sprint demo and reconcile documentation](https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/9)
+## 3. Refined Backlog Items
 
-## API contract
-- `POST /api/prediction/predict` (legacy `/predict` supported).
-- Response: `{"predicted_grade": 11.43, "model": "RandomForestRegressor", "scale": [0, 20]}` (illustrative).
-- Never submit G1, G2 or G3 as features.
-- `POST /api/study-planner` is separate from prediction and requires server-side OpenAI configuration.
+### Item 1: Connect Frontend to Flask API
 
-## Dependencies and check-ins
-1. Confirm model/API and input contract (S1-1, S1-2).
-2. Review the direct prediction and scenario flow (S1-3); progress planner verification independently (S1-4).
-3. Review reproducible evaluation results (S1-5).
-4. Verify browser flows (S1-6), then perform clean-checkout demo and publication review (S1-7).
-At each check-in, record evidence, remaining defects, blocked work and the next action in the corresponding issue.
+**Description**
 
-## Definition of Done
-- [ ] Acceptance criteria are verified with evidence and reviewed by the team.
-- [ ] Relevant automated tests, lint and build pass.
-- [ ] Desktop/mobile and keyboard/error states are checked for affected user flows.
-- [ ] A clean checkout can reproduce the documented demo.
-- [ ] Model limitations and the sample-versus-live planner distinction remain visible.
-- [ ] No credentials or unrelated files are published.
-- [ ] Implementation is committed and published with a reviewed commit/PR reference.
-- [ ] Documentation, issue checklist and sprint review are updated.
-- [ ] All remaining work is explicitly moved to the backlog rather than reported complete.
+Create a connection between the React prediction form and the Flask backend.
 
-## Sprint review / retrospective
-Pending: demo outcome, accepted issues, unresolved OpenAI access, defects, evaluation findings, lessons learned and next-sprint actions.
+When the user clicks the prediction button, the frontend should collect all form values and send them to the Flask API using a POST request.
+
+Example endpoint:
+
+`POST /predict`
+
+Example response:
+
+```json
+{
+  "prediction": 13.5
+}
+```
+
+### Acceptance Criteria
+
+- [ ] The React form collects all required student information.
+- [ ] Data is sent to the Flask API using a POST request.
+- [ ] The backend receives the request successfully.
+- [ ] The API returns a prediction value.
+- [ ] The frontend correctly receives the JSON response.
+- [ ] No page reload occurs during prediction.
+- [ ] API errors are handled and displayed to the user.
+
+### Item 2: Integrate Random Forest Prediction Model
+
+**Description**
+
+Integrate the trained Random Forest Regressor into the Flask backend.
+
+The API should convert input data into the same format used during model training and return the predicted student final grade.
+
+### Acceptance Criteria
+
+- [ ] The trained model can be loaded when the Flask server starts.
+- [ ] Input data is converted into the correct feature format.
+- [ ] Categorical variables are encoded correctly.
+- [ ] The model returns a numeric prediction.
+- [ ] The prediction is within the expected grade range of 0–20.
+- [ ] The API returns the prediction as JSON.
+- [ ] Invalid input does not crash the Flask server.
+
+---
+
+## 4. Tasks and Work Assignment
+
+### Complete Student Input Form
+
+- [ ] Create input fields based on the student dataset.
+- [ ] Add dropdown menus for categorical features.
+- [ ] Add numeric inputs for age, grades, absences, etc.
+- [ ] Add form submit button.
+- [ ] Check responsive layout.
+
+**Assigned to:** Thanh
+
+### Connect Frontend to Flask API
+
+- [ ] Create `/predict` endpoint in Flask.
+- [ ] Create frontend API request using `fetch` or `axios`.
+- [ ] Convert form data to JSON.
+- [ ] Send POST request.
+- [ ] Handle API response.
+- [ ] Handle API error.
+
+**Assigned to:** Thanh
+
+### Integrate Random Forest Model
+
+- [ ] Train or load Random Forest Regressor.
+- [ ] Save trained model.
+- [ ] Load model in Flask.
+- [ ] Prepare preprocessing logic.
+- [ ] Test prediction using sample student data.
+
+**Assigned to:** Hilal
+
+### Input Validation
+
+- [ ] Prevent empty required fields.
+- [ ] Check valid numeric ranges.
+- [ ] Validate G1 and G2 grade values.
+- [ ] Display error messages when input is invalid.
+
+**Assigned to:** Hilal
+
+### Display Prediction Result
+
+- [ ] Create prediction result component.
+- [ ] Display predicted grade out of 20.
+- [ ] Add loading state while prediction is running.
+- [ ] Add error message when prediction fails.
+
+**Assigned to:** Thanh
+
+### Check-ins
+
+- Check-in 1: After completing the input form.
+- Check-in 2: After connecting the frontend and Flask API.
+- Check-in 3: After integrating the machine learning model.
+- Final check-in: After completing end-to-end testing.
+
+During each check-in, review completed tasks, current problems, remaining tasks, and next priorities.
+
+---
+
+## 5. Definition of Done
+
+A backlog item is considered **Done** when:
+
+- [ ] The implementation is completed.
+- [ ] The feature works as expected.
+- [ ] Code runs without critical errors.
+- [ ] Input and output are tested.
+- [ ] The feature is integrated with the existing project.
+- [ ] The code is readable and organized.
+- [ ] No major console errors are present.
+- [ ] The user interface works on desktop screens.
+- [ ] Changes are committed to Git.
+- [ ] Changes are pushed to the GitHub repository.
+- [ ] Acceptance criteria are satisfied.
+
+
+## Implementation notes
+
+The detailed local implementation plan, validation evidence and linked issues are preserved in [the implementation plan](docs/sprints/sprint-01/local-implementation-plan.md). Task assignments above remain the team reference. The current prediction API returns `predicted_grade` and excludes G1/G2 from inputs; see [README](README.md) for the implemented contract and setup.
