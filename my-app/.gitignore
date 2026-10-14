@@ -11,6 +11,13 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+backend/model/student_model.pkl
 
 # Editor directories and files
 .vscode/*

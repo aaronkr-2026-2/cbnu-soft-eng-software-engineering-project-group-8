@@ -1,5 +1,7 @@
+import AuthMenu from "./auth-menu.jsx";
 import { Link } from "react-router-dom";
 import "./homepage.css";
+import ProjectOverview from "./project-overview.jsx";
 
 export default function Homepage() {
   return (
@@ -9,12 +11,15 @@ export default function Homepage() {
           Student<span>AI</span>
         </Link>
 
-        <nav className="home-nav" aria-label="Điều hướng chính">
-          <Link to="/" className="active" aria-current="page">Trang chủ</Link>
-          <a href="#about">Giới thiệu</a>
+        <nav className="home-nav" aria-label="Main navigation">
+          <Link to="/" className="active" aria-current="page">Home</Link>
+          <a href="#about">About</a>
+          <a href="#roadmap">Roadmap</a>
           <Link to="/detect">
-            Phân tích
+            Analysis
           </Link>
+          <Link to="/study-planner">Study Planner</Link>
+          <AuthMenu />
         </nav>
       </header>
 
@@ -26,59 +31,59 @@ export default function Homepage() {
             </span>
 
             <h1>
-              Hiểu kết quả học tập.
-              <span> Định hướng tốt hơn.</span>
+              Understand academic performance.
+              <span> Make better decisions.</span>
             </h1>
 
             <p>
-              Khám phá ứng dụng trí tuệ nhân tạo trong dự đoán điểm
-              sinh viên và tìm hiểu các yếu tố ảnh hưởng đến kết quả
-              dự đoán.
+              Explore how artificial intelligence predicts student grades
+              and learn about the factors that influence
+              predictions.
             </p>
 
             <div className="hero-actions">
               <Link to="/detect" className="home-button primary">
-                Bắt đầu phân tích →
+                Start analysis →
               </Link>
 
               <a href="#about" className="home-button secondary">
-                Tìm hiểu dự án
+                Explore the project
               </a>
             </div>
 
             <p className="hero-note">
-              Dự án nghiên cứu ứng dụng Machine Learning trong giáo dục.
+              A research project exploring machine learning in education.
             </p>
           </div>
 
           <div className="hero-card">
             <div className="card-icon" aria-hidden="true">✦</div>
-            <h2>Từ dữ liệu đến thông tin hữu ích</h2>
+            <h2>From data to useful insights</h2>
             <p>
-              Hỗ trợ khám phá kết quả học tập thông qua một quy trình
-              đơn giản.
+              Explore academic performance through a simple
+              process.
             </p>
 
             <ol className="home-steps">
               <li>
                 <span>01</span>
                 <div>
-                  <strong>Nhập thông tin</strong>
-                  <p>Cung cấp dữ liệu học tập của sinh viên.</p>
+                  <strong>Enter information</strong>
+                  <p>Provide student learning data.</p>
                 </div>
               </li>
               <li>
                 <span>02</span>
                 <div>
-                  <strong>Nhận dự đoán</strong>
-                  <p>Ước tính điểm bằng mô hình Random Forest.</p>
+                  <strong>Get a prediction</strong>
+                  <p>Estimate grades using a Random Forest model.</p>
                 </div>
               </li>
               <li>
                 <span>03</span>
                 <div>
-                  <strong>Tìm hiểu kết quả</strong>
-                  <p>Xem đóng góp của các đặc trưng với SHAP.</p>
+                  <strong>Understand the results</strong>
+                  <p>View the predicted final grade on a 20-point scale.</p>
                 </div>
               </li>
             </ol>
@@ -87,48 +92,49 @@ export default function Homepage() {
 
         <section id="about" className="home-about">
           <div className="section-intro">
-            <span className="section-label">VỀ DỰ ÁN</span>
-            <h2>Ứng dụng AI để hiểu dữ liệu học tập</h2>
+            <span className="section-label">ABOUT THE PROJECT</span>
+            <h2>Using AI to understand learning data</h2>
             <p>
-              Kết hợp dự đoán và giải thích mô hình trong một giao diện
-              dễ sử dụng.
+              Explore final grade predictions from student data through an
+              easy-to-use interface.
             </p>
           </div>
 
           <div className="home-features">
             <article className="feature-card">
               <span className="feature-number">01 / PREDICTION</span>
-              <h3>Dự đoán điểm số</h3>
+              <h3>Grade prediction</h3>
               <p>
-                Sử dụng Random Forest để ước tính điểm cuối kỳ từ
-                thông tin học tập.
+                Use Random Forest to estimate final grades from
+                learning information.
               </p>
             </article>
 
             <article className="feature-card">
-              <span className="feature-number">02 / EXPLAINABILITY</span>
-              <h3>Giải thích với SHAP</h3>
+              <span className="feature-number">02 / DATASET</span>
+              <h3>Learning data</h3>
               <p>
-                Tìm hiểu những đặc trưng đóng góp làm tăng hoặc giảm
-                kết quả dự đoán.
+                Explore 649 records in the UCI Student Performance dataset,
+                without using G1 and G2 grades as inputs.
               </p>
             </article>
 
             <article className="feature-card">
               <span className="feature-number">03 / RESEARCH</span>
-              <h3>Hướng phát triển</h3>
+              <h3>Future development</h3>
               <p>
-                Nghiên cứu mở rộng với Federated Learning để huấn luyện
-                trên dữ liệu phân tán.
+                Explore Federated Learning to train models
+                on distributed data.
               </p>
             </article>
           </div>
         </section>
+        <ProjectOverview />
       </main>
 
       <footer className="home-footer">
         <span className="footer-brand">StudentAI</span>
-        <p>Student Performance Prediction · Dự án học tập và nghiên cứu</p>
+        <p>Student Performance Prediction · An educational and research project</p>
       </footer>
     </div>
   );

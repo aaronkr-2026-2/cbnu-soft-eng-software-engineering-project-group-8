@@ -1,6 +1,9 @@
-import { useState } from "react";
+import AuthMenu from "./auth-menu.jsx";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./detect.css";
+import ScenarioComparison from "./scenario-comparison.jsx";
+import { predictGrade } from "./prediction-api.js";
 
 // Values from the supplied CSV row; asterisks are annotations, not data.
 // G3 = 11 is the reference target and is never included in prediction inputs.
@@ -35,8 +38,6 @@ const initialForm = {
   Walc: 1,
   health: 3,
   absences: 4,
-  G1: 0,
-  G2: 11,
 };
 
 const SelectField = ({ label, name, value, options, onChange }) => (
@@ -77,46 +78,74 @@ const NumberField = ({
 );
 
 const yesNo = [
-  { value: "yes", label: "Có" },
-  { value: "no", label: "Không" },
+  { value: "yes", label: "Yes" },
+  { value: "no", label: "No" },
 ];
 
 const optionsFrom = (labels) => labels.map((label, index) => ({ value: index + 1, label }));
-const oneToFive = optionsFrom(["Rất thấp", "Thấp", "Trung bình", "Cao", "Rất cao"]);
-const familyScale = optionsFrom(["Rất kém", "Kém", "Trung bình", "Tốt", "Rất tốt"]);
-const healthScale = optionsFrom(["Rất kém", "Kém", "Trung bình", "Tốt", "Rất tốt"]);
-const educationOptions = ["Không đi học", "Tiểu học (đến lớp 4)", "Lớp 5–9", "Trung học", "Giáo dục bậc cao"].map((label, value) => ({ value, label }));
-const travelOptions = optionsFrom(["Dưới 15 phút", "15–30 phút", "30 phút–1 giờ", "Trên 1 giờ"]);
-const studyOptions = optionsFrom(["Dưới 2 giờ/tuần", "2–5 giờ/tuần", "5–10 giờ/tuần", "Trên 10 giờ/tuần"]);
+const oneToFive = optionsFrom(["Very low", "Low", "Average", "High", "Very high"]);
+const familyScale = optionsFrom(["Very poor", "Poor", "Average", "Good", "Very good"]);
+const healthScale = optionsFrom(["Very poor", "Poor", "Average", "Good", "Very good"]);
+const educationOptions = ["No formal education", "Primary education (up to grade 4)", "Grades 5–9", "Secondary education", "Higher education"].map((label, value) => ({ value, label }));
+const travelOptions = optionsFrom(["Under 15 minutes", "15–30 minutes", "30 minutes–1 hour", "Over 1 hour"]);
+const studyOptions = optionsFrom(["Under 2 hours/week", "2–5 hours/week", "5–10 hours/week", "Over 10 hours/week"]);
 
 function Detect() {
   const [formData, setFormData] = useState(initialForm);
-  const [result, setResult] = useState(null);
+  const baselineFormRef = useRef(null);
+  const [resetVersion, setResetVersion] = useState(0);
+  const [prediction, setPrediction] = useState(null);
+  const [predicting, setPredicting] = useState(false);
+  const [predictionError, setPredictionError] = useState("");
+  const predictionRequest = useRef(null);
+  const resultRef = useRef(null);
+  useEffect(() => () => predictionRequest.current?.abort(), []);
+
+  const clearPrediction = () => {
+    predictionRequest.current?.abort();
+    predictionRequest.current = null;
+    setPrediction(null);
+    setPredictionError("");
+    setPredicting(false);
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    clearPrediction();
 
-    setResult(null);
+
     setFormData((previous) => ({
       ...previous,
       [name]: typeof initialForm[name] === "number" ? (value === "" ? "" : Number(value)) : value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Sau này thay phần này bằng API gọi Random Forest
-
-    setResult({
-      status: "Dữ liệu đã sẵn sàng",
-      message: "Đã chuẩn bị dữ liệu. Chưa có kết quả dự đoán vì giao diện chưa được kết nối với mô hình AI.",
-    });
+    clearPrediction();
+    const controller = new AbortController();
+    predictionRequest.current = controller;
+    setPredicting(true);
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const grade = await predictGrade(formData, controller.signal);
+      if (predictionRequest.current === controller) {
+        setPrediction(grade);
+        requestAnimationFrame(() => resultRef.current?.focus());
+      }
+    } catch (error) {
+      if (predictionRequest.current === controller) setPredictionError(controller.signal.aborted ? "The prediction request timed out. Please try again." : error.message);
+    } finally {
+      clearTimeout(timeout);
+      if (predictionRequest.current === controller) { predictionRequest.current = null; setPredicting(false); }
+    }
   };
 
   const handleReset = () => {
+    clearPrediction();
     setFormData(initialForm);
-    setResult(null);
+    setResetVersion(version => version + 1);
+
   };
 
   return (
@@ -126,10 +155,12 @@ function Detect() {
         <Link to="/" className="home-logo">
           Student<span>AI</span>
         </Link>
-        <nav className="home-nav" aria-label="Điều hướng chính">
-          <Link to="/">Trang chủ</Link>
-          <a href="/#about">Giới thiệu</a>
-          <Link to="/detect" className="active" aria-current="page">Phân tích</Link>
+        <nav className="home-nav" aria-label="Main navigation">
+          <Link to="/">Home</Link>
+          <a href="/#about">About</a>
+          <Link to="/detect" className="active" aria-current="page">Analysis</Link>
+          <Link to="/study-planner">Study Planner</Link>
+          <AuthMenu />
         </nav>
       </header>
 
@@ -137,30 +168,30 @@ function Detect() {
       <section className="detect-hero">
         <span className="home-badge">AI STUDENT ANALYSIS</span>
 
-        <h1>Phân tích dữ liệu học sinh</h1>
+        <h1>Student data analysis</h1>
 
         <p>
-          Nhập 32 đặc trưng để chuẩn bị dự đoán điểm cuối kỳ G3.
-          Các trường đang được điền theo dòng dữ liệu mẫu bạn cung cấp.
+          Enter 30 features to prepare a prediction of the final grade, G3.
+          The fields are prefilled with the sample data you provided.
         </p>
       </section>
 
       <main className="detect-content">
-        <p className="demo-notice">Bản demo giao diện · Chưa kết nối mô hình dự đoán.</p>
-        <form className="analysis-card" onSubmit={handleSubmit}>
+        <p className="demo-notice">Complete the profile, then try changing study habits to compare two predicted grades.</p>
+        <form ref={baselineFormRef} className="analysis-card" onSubmit={handleSubmit}>
           {/* BASIC INFORMATION */}
           <section className="form-section">
             <div className="section-title">
               <span>01</span>
               <div>
-                <h2>Thông tin cơ bản</h2>
-                <p>Thông tin chung của học sinh</p>
+                <h2>Basic information</h2>
+                <p>General student information</p>
               </div>
             </div>
 
             <div className="form-grid">
               <SelectField
-                label="Trường"
+                label="School"
                 name="school"
                 value={formData.school}
                 onChange={handleChange}
@@ -171,18 +202,18 @@ function Detect() {
               />
 
               <SelectField
-                label="Giới tính"
+                label="Gender"
                 name="sex"
                 value={formData.sex}
                 onChange={handleChange}
                 options={[
-                  { value: "F", label: "Nữ" },
-                  { value: "M", label: "Nam" },
+                  { value: "F", label: "Female" },
+                  { value: "M", label: "Male" },
                 ]}
               />
 
               <NumberField
-                label="Tuổi"
+                label="Age"
                 name="age"
                 value={formData.age}
                 min={15}
@@ -191,35 +222,35 @@ function Detect() {
               />
 
               <SelectField
-                label="Khu vực sống"
+                label="Residential area"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
                 options={[
-                  { value: "U", label: "Thành thị" },
-                  { value: "R", label: "Nông thôn" },
+                  { value: "U", label: "Urban" },
+                  { value: "R", label: "Rural" },
                 ]}
               />
 
               <SelectField
-                label="Quy mô gia đình"
+                label="Family size"
                 name="famsize"
                 value={formData.famsize}
                 onChange={handleChange}
                 options={[
-                  { value: "LE3", label: "≤ 3 người" },
-                  { value: "GT3", label: "> 3 người" },
+                  { value: "LE3", label: "≤ 3 people" },
+                  { value: "GT3", label: "> 3 people" },
                 ]}
               />
 
               <SelectField
-                label="Tình trạng cha mẹ"
+                label="Parents' living arrangement"
                 name="Pstatus"
                 value={formData.Pstatus}
                 onChange={handleChange}
                 options={[
-                  { value: "T", label: "Sống cùng nhau" },
-                  { value: "A", label: "Sống riêng" },
+                  { value: "T", label: "Living together" },
+                  { value: "A", label: "Living apart" },
                 ]}
               />
             </div>
@@ -230,14 +261,14 @@ function Detect() {
             <div className="section-title">
               <span>02</span>
               <div>
-                <h2>Gia đình</h2>
-                <p>Thông tin cha mẹ và môi trường gia đình</p>
+                <h2>Family</h2>
+                <p>Information about parents and the home environment</p>
               </div>
             </div>
 
             <div className="form-grid">
               <SelectField
-                label="Học vấn mẹ"
+                label="Mother's education"
                 name="Medu"
                 value={formData.Medu}
                 options={educationOptions}
@@ -245,7 +276,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Học vấn cha"
+                label="Father's education"
                 name="Fedu"
                 value={formData.Fedu}
                 options={educationOptions}
@@ -253,47 +284,47 @@ function Detect() {
               />
 
               <SelectField
-                label="Nghề nghiệp mẹ"
+                label="Mother's occupation"
                 name="Mjob"
                 value={formData.Mjob}
                 onChange={handleChange}
                 options={[
-                  { value: "teacher", label: "Giáo viên" },
-                  { value: "health", label: "Y tế" },
-                  { value: "services", label: "Dịch vụ" },
-                  { value: "at_home", label: "Ở nhà" },
-                  { value: "other", label: "Khác" },
+                  { value: "teacher", label: "Teacher" },
+                  { value: "health", label: "Healthcare" },
+                  { value: "services", label: "Services" },
+                  { value: "at_home", label: "At home" },
+                  { value: "other", label: "Other" },
                 ]}
               />
 
               <SelectField
-                label="Nghề nghiệp cha"
+                label="Father's occupation"
                 name="Fjob"
                 value={formData.Fjob}
                 onChange={handleChange}
                 options={[
-                  { value: "teacher", label: "Giáo viên" },
-                  { value: "health", label: "Y tế" },
-                  { value: "services", label: "Dịch vụ" },
-                  { value: "at_home", label: "Ở nhà" },
-                  { value: "other", label: "Khác" },
+                  { value: "teacher", label: "Teacher" },
+                  { value: "health", label: "Healthcare" },
+                  { value: "services", label: "Services" },
+                  { value: "at_home", label: "At home" },
+                  { value: "other", label: "Other" },
                 ]}
               />
 
               <SelectField
-                label="Người giám hộ"
+                label="Guardian"
                 name="guardian"
                 value={formData.guardian}
                 onChange={handleChange}
                 options={[
-                  { value: "mother", label: "Mẹ" },
-                  { value: "father", label: "Cha" },
-                  { value: "other", label: "Khác" },
+                  { value: "mother", label: "Mother" },
+                  { value: "father", label: "Father" },
+                  { value: "other", label: "Other" },
                 ]}
               />
 
               <SelectField
-                label="Quan hệ gia đình"
+                label="Family relationships"
                 name="famrel"
                 value={formData.famrel}
                 options={familyScale}
@@ -307,27 +338,27 @@ function Detect() {
             <div className="section-title">
               <span>03</span>
               <div>
-                <h2>Học tập</h2>
-                <p>Thời gian học và hỗ trợ học tập</p>
+                <h2>Study</h2>
+                <p>Study time and learning support</p>
               </div>
             </div>
 
             <div className="form-grid">
               <SelectField
-                label="Lý do chọn trường"
+                label="Reason for choosing the school"
                 name="reason"
                 value={formData.reason}
                 onChange={handleChange}
                 options={[
-                  { value: "home", label: "Gần nhà" },
-                  { value: "reputation", label: "Uy tín của trường" },
-                  { value: "course", label: "Chương trình học phù hợp" },
-                  { value: "other", label: "Khác" },
+                  { value: "home", label: "Close to home" },
+                  { value: "reputation", label: "School reputation" },
+                  { value: "course", label: "Suitable curriculum" },
+                  { value: "other", label: "Other" },
                 ]}
               />
 
               <SelectField
-                label="Thời gian đến trường"
+                label="Travel time to school"
                 name="traveltime"
                 value={formData.traveltime}
                 options={travelOptions}
@@ -335,7 +366,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Thời gian học mỗi tuần"
+                label="Weekly study time"
                 name="studytime"
                 value={formData.studytime}
                 options={studyOptions}
@@ -343,7 +374,7 @@ function Detect() {
               />
 
               <NumberField
-                label="Số lần trượt"
+                label="Past class failures"
                 name="failures"
                 value={formData.failures}
                 min={0}
@@ -352,7 +383,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Hỗ trợ từ trường"
+                label="School support"
                 name="schoolsup"
                 value={formData.schoolsup}
                 onChange={handleChange}
@@ -360,7 +391,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Hỗ trợ từ gia đình"
+                label="Family support"
                 name="famsup"
                 value={formData.famsup}
                 onChange={handleChange}
@@ -368,7 +399,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Học thêm có phí"
+                label="Paid extra classes"
                 name="paid"
                 value={formData.paid}
                 onChange={handleChange}
@@ -376,7 +407,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Dự định học cao hơn"
+                label="Plans for higher education"
                 name="higher"
                 value={formData.higher}
                 onChange={handleChange}
@@ -391,14 +422,14 @@ function Detect() {
               <span>04</span>
 
               <div>
-                <h2>Đời sống & hoạt động</h2>
-                <p>Hoạt động và thói quen của học sinh</p>
+                <h2>Lifestyle & activities</h2>
+                <p>Student activities and habits</p>
               </div>
             </div>
 
             <div className="form-grid">
               <SelectField
-                label="Hoạt động ngoại khóa"
+                label="Extracurricular activities"
                 name="activities"
                 value={formData.activities}
                 onChange={handleChange}
@@ -406,7 +437,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Từng học mẫu giáo"
+                label="Attended nursery school"
                 name="nursery"
                 value={formData.nursery}
                 onChange={handleChange}
@@ -414,7 +445,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Internet tại nhà"
+                label="Internet access at home"
                 name="internet"
                 value={formData.internet}
                 onChange={handleChange}
@@ -422,7 +453,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Quan hệ tình cảm"
+                label="In a romantic relationship"
                 name="romantic"
                 value={formData.romantic}
                 onChange={handleChange}
@@ -430,7 +461,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Thời gian rảnh (1–5)"
+                label="Free time (1–5)"
                 name="freetime"
                 value={formData.freetime}
                 onChange={handleChange}
@@ -438,7 +469,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Đi chơi (1–5)"
+                label="Going out (1–5)"
                 name="goout"
                 value={formData.goout}
                 onChange={handleChange}
@@ -446,7 +477,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Uống rượu ngày thường (1–5)"
+                label="Weekday alcohol consumption (1–5)"
                 name="Dalc"
                 value={formData.Dalc}
                 onChange={handleChange}
@@ -454,7 +485,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Uống rượu cuối tuần (1–5)"
+                label="Weekend alcohol consumption (1–5)"
                 name="Walc"
                 value={formData.Walc}
                 onChange={handleChange}
@@ -462,7 +493,7 @@ function Detect() {
               />
 
               <SelectField
-                label="Sức khỏe (1–5)"
+                label="Health (1–5)"
                 name="health"
                 value={formData.health}
                 onChange={handleChange}
@@ -470,7 +501,7 @@ function Detect() {
               />
 
               <NumberField
-                label="Số buổi nghỉ"
+                label="Number of absences"
                 name="absences"
                 value={formData.absences}
                 min={0}
@@ -480,72 +511,42 @@ function Detect() {
             </div>
           </section>
 
-          {/* GRADES */}
-          <section className="form-section grade-section">
-            <div className="section-title">
-              <span>05</span>
-
-              <div>
-                <h2>Điểm số</h2>
-                <p>Điểm học tập hiện tại</p>
-              </div>
-            </div>
-
-            <div className="form-grid grade-grid">
-              <NumberField
-                label="Điểm kỳ 1 — G1 (0–20)"
-                name="G1"
-                value={formData.G1}
-                min={0}
-                max={20}
-                onChange={handleChange}
-              />
-
-              <NumberField
-                label="Điểm kỳ 2 — G2 (0–20)"
-                name="G2"
-                value={formData.G2}
-                min={0}
-                max={20}
-                onChange={handleChange}
-              />
-            </div>
-
+          <div className="form-section">
             <div className="target-note">
               <strong>G3</strong>
-              <span>
-                G3 là điểm cuối kỳ cần dự đoán (0–20), không nhập vào mô hình.
-                Dòng dữ liệu mẫu có G3 thực tế = 11; đây không phải kết quả dự đoán.
-              </span>
+              <span>The final grade to predict is on a 0–20 scale. Following the research design, G1 and G2 grades are not used as inputs.</span>
             </div>
-          </section>
-
+          </div>
           <div className="form-actions">
             <button
               type="button"
               className="reset-btn"
               onClick={handleReset}
             >
-              Khôi phục dữ liệu mẫu
+              Restore sample data
             </button>
 
-            <button type="submit" className="analyse-btn">
-              Phân tích dữ liệu →
+            <button type="submit" className="analyse-btn" disabled={predicting}>
+              {predicting ? "Predicting…" : "Predict my grade →"}
             </button>
           </div>
         </form>
 
-        {result && (
-          <div className="result-card" role="status" aria-live="polite">
-            <span>TRẠNG THÁI DỮ LIỆU</span>
-            <h2>{result.status}</h2>
-            <p>{result.message}</p>
-          </div>
-        )}
+        <div aria-live="polite">
+          {predicting && <p role="status">Analyzing your profile with Random Forest…</p>}
+          {predictionError && <p className="prediction-error" role="alert">{predictionError}</p>}
+          {prediction !== null && <section className="result-card" aria-labelledby="prediction-title">
+            <span>RANDOM FOREST · FINAL GRADE</span>
+            <h2 id="prediction-title" ref={resultRef} tabIndex={-1}>Your predicted G3: {prediction.toFixed(2)} / 20</h2>
+            <p>Estimated from 30 student features, without G1 or G2. This is a model estimate, not a guaranteed result.</p>
+            <a className="home-button secondary" href="#scenario-comparison">Explore a different study scenario ↓</a>
+          </section>}
+        </div>
+        <ScenarioComparison key={resetVersion + JSON.stringify(formData)} baseline={formData} baselineFormRef={baselineFormRef} />
       </main>
       <footer className="home-footer">
         <span className="footer-brand">StudentAI</span>
-        <p>Student Performance Prediction · Dự án học tập và nghiên cứu</p>
+        <p>Student Performance Prediction · An educational and research project</p>
       </footer>
     </div>
   );

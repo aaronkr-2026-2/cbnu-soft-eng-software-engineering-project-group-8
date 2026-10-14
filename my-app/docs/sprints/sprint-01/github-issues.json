@@ -1,0 +1,42 @@
+{
+  "repository": "aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8",
+  "milestone": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/milestone/1",
+  "tracker": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/2",
+  "issues": [
+    {
+      "number": 3,
+      "title": "[Sprint 1] Deliver the trained Random Forest prediction API",
+      "url": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/3"
+    },
+    {
+      "number": 4,
+      "title": "[Sprint 1] Verify the 30-feature input contract and prediction errors",
+      "url": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/4"
+    },
+    {
+      "number": 5,
+      "title": "[Sprint 1] Complete the prediction and what-if comparison user flow",
+      "url": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/5"
+    },
+    {
+      "number": 6,
+      "title": "[Sprint 1] Validate the OpenAI Study Planner with a real API response",
+      "url": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/6"
+    },
+    {
+      "number": 7,
+      "title": "[Sprint 1] Make model comparison and cross-validation reproducible",
+      "url": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/7"
+    },
+    {
+      "number": 8,
+      "title": "[Sprint 1] Verify desktop, mobile and accessible end-to-end flows",
+      "url": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/8"
+    },
+    {
+      "number": 9,
+      "title": "[Sprint 1] Publish a reproducible sprint demo and reconcile documentation",
+      "url": "https://github.com/aaronkr-2026-2/cbnu-soft-eng-software-engineering-project-group-8/issues/9"
+    }
+  ]
+}

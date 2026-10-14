@@ -1,0 +1,50 @@
+{
+  "model": "RandomForestRegressor",
+  "dataset": "student-por.csv",
+  "features": [
+    "school",
+    "sex",
+    "address",
+    "famsize",
+    "Pstatus",
+    "Mjob",
+    "Fjob",
+    "reason",
+    "guardian",
+    "schoolsup",
+    "famsup",
+    "paid",
+    "activities",
+    "nursery",
+    "higher",
+    "internet",
+    "romantic",
+    "age",
+    "Medu",
+    "Fedu",
+    "traveltime",
+    "studytime",
+    "failures",
+    "famrel",
+    "freetime",
+    "goout",
+    "Dalc",
+    "Walc",
+    "health",
+    "absences"
+  ],
+  "excluded_grades": [
+    "G1",
+    "G2"
+  ],
+  "target": "G3",
+  "train_rows": 519,
+  "test_rows": 130,
+  "random_state": 42,
+  "sklearn_version": "1.7.2",
+  "metrics": {
+    "mae": 2.0208586205461208,
+    "rmse": 2.7665544724965208,
+    "r2": 0.21513058133898755
+  }
+}

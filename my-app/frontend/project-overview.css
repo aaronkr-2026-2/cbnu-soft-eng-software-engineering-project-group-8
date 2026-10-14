@@ -1,0 +1,46 @@
+.project-section { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 36px 72px; scroll-margin-top: 28px; }
+.dataset-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); overflow: hidden; }
+.dataset-stats > div { padding: 26px; display: flex; flex-direction: column-reverse; gap: 6px; border-right: 1px solid var(--border); }
+.dataset-stats > div:last-child { border-right: 0; }
+.dataset-stats dt { color: var(--muted); font-size: 12px; }
+.dataset-stats dd { margin: 0; color: var(--accent-ink); font-size: 34px; font-weight: 800; }
+.dataset-note { margin-top: 18px; padding: 22px 26px; border-radius: 12px; background: var(--secondary-soft); }
+.dataset-note strong { font-size: 14px; }
+.dataset-note p, .prediction-flow p, .roadmap-card p, .faq-section details p, .team-panel p { color: var(--muted); font-size: 13px; line-height: 1.9; margin: 10px 0 0; }
+.prediction-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; padding: 0; margin: 0; list-style: none; }
+.prediction-flow li { padding: 24px; border: 1px solid var(--border); background: var(--surface); border-radius: 16px; }
+.flow-number { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; color: var(--accent-ink); background: var(--secondary-soft); font-size: 12px; font-weight: 700; }
+.prediction-flow h3, .roadmap-card h3 { margin: 18px 0 10px; font-size: 17px; }
+.research-panel { display: grid; grid-template-columns: 1.2fr 1fr; gap: 44px; align-items: center; padding: 42px; background: var(--sage); color: var(--surface); border-radius: 22px; }
+.research-badge { color: var(--ink); font-size: 10px; letter-spacing: 1.4px; font-weight: 700; }
+.research-panel h2 { font-size: 28px; line-height: 1.5; margin: 18px 0; }
+.research-panel p { font-size: 14px; line-height: 1.9; color: var(--ink); }
+.research-panel .research-caption { font-size: 12px; color: var(--ink); margin-top: 20px; }
+.federated-diagram { padding: 24px; background: var(--primary-soft); border: 1px solid var(--accent-ink); border-radius: 16px; text-align: center; }
+.client-nodes { display: flex; gap: 8px; }
+.client-nodes span { flex: 1; padding: 12px 4px; border: 1px solid var(--accent-ink); border-radius: 8px; font-size: 11px; }
+.federated-diagram p { font-size: 11px; margin: 12px 0; }
+.aggregation-node, .global-node { padding: 14px 10px; border-radius: 10px; font-size: 13px; font-weight: 600; }
+.aggregation-node { background: var(--secondary); }
+.global-node { background: var(--secondary); color: var(--primary); }
+.roadmap-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.roadmap-card { padding: 26px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
+.phase-status { display: inline-block; padding: 6px 10px; border-radius: 6px; background: var(--secondary-soft); color: var(--muted); font-size: 10px; font-weight: 600; }
+.phase-complete { background: var(--secondary); color: var(--ink); }
+.roadmap-card ul { padding-left: 18px; margin: 20px 0 0; color: var(--muted); font-size: 12px; line-height: 2.3; }
+.faq-section details { border-bottom: 1px solid var(--border); padding: 20px 0; }
+.faq-section summary { cursor: pointer; color: var(--ink); font-size: 14px; font-weight: 600; }
+.faq-section summary:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 6px; border-radius: 4px; }
+.faq-section details p { max-width: 820px; padding-left: 18px; }
+.team-panel { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 32px; background: var(--secondary-soft); border-radius: 18px; }
+.team-panel h2 { font-size: 22px; margin: 12px 0; }
+.team-panel ul { list-style: none; padding: 0; margin: 0; color: var(--ink); font-size: 14px; line-height: 2; }
+@media (max-width: 900px) { .project-section { padding: 0 24px 56px; } .prediction-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } .research-panel { gap: 24px; padding: 28px; } .roadmap-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .project-section { padding: 0 20px 44px; } .dataset-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .dataset-stats > div { padding: 20px; border-bottom: 1px solid var(--border); } .dataset-stats > div:nth-child(even) { border-right: 0; } .dataset-stats > div:nth-last-child(-n+2) { border-bottom: 0; } .prediction-flow { grid-template-columns: 1fr; } .research-panel { grid-template-columns: 1fr; padding: 24px 18px; } .research-panel h2 { font-size: 24px; } .federated-diagram { padding: 16px; } .team-panel { flex-direction: column; align-items: flex-start; padding: 24px; } }
+
+.dataset-stats, .team-panel { background: var(--secondary); }
+.dataset-stats dd { color: var(--ink); }
+.flow-number { background: var(--primary); color: var(--on-primary); }
+.research-panel, .global-node { color: var(--ink); }
+.roadmap-card { border-top: 5px solid var(--primary); }
+.faq-section details[open] summary { color: var(--accent-ink); }
