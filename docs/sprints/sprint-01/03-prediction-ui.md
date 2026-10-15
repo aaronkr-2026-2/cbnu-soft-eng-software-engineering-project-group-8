@@ -14,11 +14,11 @@ As a student, I want to see my predicted grade and compare a different study-tim
 Implemented locally: Predict my grade button, result out of 20, loading/error states, abort and stale-result clearing, plus two-scenario comparison. A real HTTP request through Vite's prediction proxy returned 11.43 for the first dataset row, and /detect returned HTTP 200. No full browser interaction test has been recorded.
 
 ## Relevant files
-- `my-app/frontend/detect.jsx`
-- `my-app/frontend/detect.css`
-- `my-app/frontend/prediction-api.js`
-- `my-app/frontend/scenario-comparison.jsx`
-- `my-app/vite.config.js`
+- `frontend/detect.jsx`
+- `frontend/detect.css`
+- `frontend/prediction-api.js`
+- `frontend/scenario-comparison.jsx`
+- `vite.config.js`
 
 ## Acceptance criteria
 - [ ] Submit the complete form to /api/prediction/predict without a page reload and display predicted_grade.

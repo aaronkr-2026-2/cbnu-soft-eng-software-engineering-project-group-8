@@ -1,5 +1,7 @@
 # AI-Based System for Student Performance Prediction
 
+Run all setup, development and test commands from the repository root.
+
 ## Overview
 
 A web-based AI system that predicts student final grades using machine learning. The project will later extend the centralized model into a Federated Learning system to explore privacy-preserving distributed training.
@@ -114,7 +116,7 @@ Visit `/study-planner` or choose **Study Planner** in the navigation. Enter a su
 
 **Preview a sample plan** works without an API key and is explicitly labeled as a static, non-AI example. Real generation requires the separate planner service and an OpenAI API key with API billing/access enabled.
 
-From `my-app`, copy `.env.example` to `.env` and set `OPENAI_API_KEY` locally. `.env` is ignored by Git. Do not put keys in JSX or any `VITE_*` variable. `OPENAI_MODEL` defaults to `gpt-5-mini` and can be changed to a Responses API model supporting the supplied strict JSON schema.
+From the repository root, copy `.env.example` to `.env` and set `OPENAI_API_KEY` locally. `.env` is ignored by Git. Do not put keys in JSX or any `VITE_*` variable. `OPENAI_MODEL` defaults to `gpt-5-mini` and can be changed to a Responses API model supporting the supplied strict JSON schema.
 
 Use Node.js 22.9+ (or Node.js 24 LTS) for the `--env-file-if-exists` launcher. Start these commands in separate terminals:
 
@@ -135,7 +137,7 @@ Run `npm run test:planner` for validation and HTTP integration tests using mocke
 
 The Analysis page (`/detect`) now predicts a single profile with **Predict my grade**, and continues to support two-scenario comparison. Both use the same trained Random Forest API. Editing the profile cancels an outstanding single prediction and clears its previous result. This feature runs locally without an OpenAI key or API credits.
 
-Initial setup from `my-app` (Python 3.10+):
+Initial setup from the repository root (Python 3.10+):
 
 ```powershell
 python -m venv .venv

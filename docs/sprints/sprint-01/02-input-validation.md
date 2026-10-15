@@ -14,11 +14,11 @@ As an academic adviser, I want invalid or unavailable predictions to be clearly 
 Local validation rejects missing/unknown fields, invalid categories, numeric strings, booleans, fractions, invalid ranges, and G1/G2/G3. JSON/content-type/body-size checks and frontend error messages are implemented. Automated coverage exists; browser verification remains outstanding.
 
 ## Relevant files
-- `my-app/backend/model/features.py`
-- `my-app/backend/app/test_api.py`
-- `my-app/frontend/detect.jsx`
-- `my-app/frontend/prediction-api.js`
-- `my-app/frontend/prediction-api.test.js`
+- `backend/model/features.py`
+- `backend/app/test_api.py`
+- `frontend/detect.jsx`
+- `frontend/prediction-api.js`
+- `frontend/prediction-api.test.js`
 
 ## Acceptance criteria
 - [ ] Use exactly the 30 supported features; G1 and G2 must not appear as input fields.
