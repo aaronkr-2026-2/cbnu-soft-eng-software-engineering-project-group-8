@@ -14,10 +14,10 @@ As an ML researcher, I want reproducible baseline comparisons so that I can eval
 compare_models.py and cross_validation.py exist, but both use a working-directory-dependent dataset path and separate preprocessing/model definitions. Their Random Forest uses 100 trees, whereas the current saved pipeline uses 200 trees and min_samples_leaf=2. The current saved model has a single held-out evaluation; no newly verified cross-validation report is claimed.
 
 ## Relevant files
-- `backend/model/compare_models.py`
-- `backend/model/cross_validation.py`
-- `backend/model/features.py`
-- `backend/model/train_model.py`
+- `my-app/backend/model/compare_models.py`
+- `my-app/backend/model/cross_validation.py`
+- `my-app/backend/model/features.py`
+- `my-app/backend/model/train_model.py`
 
 ## Acceptance criteria
 - [ ] Resolve dataset paths relative to the scripts and reuse the shared 30-feature schema.

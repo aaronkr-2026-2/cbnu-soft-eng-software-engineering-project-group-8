@@ -14,13 +14,13 @@ As a teammate or reviewer, I want to run the sprint deliverable from a clean che
 Setup scripts, pinned Python requirements and detailed README sections exist locally. The README overview still describes a Vietnamese UI and says the dataset is absent, which conflicts with the current workspace. Sprint 1's older plan also referenced G1/G2 input and a prediction response key. Local changes must be reviewed and published before satisfying the original Git-based Definition of Done.
 
 ## Relevant files
-- `README.md`
-- `SPRINT_01.md`
-- `AI_LOG.md`
-- `package.json`
-- `backend/requirements.txt`
-- `.env.example`
-- `.gitignore`
+- `my-app/README.md`
+- `my-app/SPRINT_01.md`
+- `my-app/AI_LOG.md`
+- `my-app/package.json`
+- `my-app/backend/requirements.txt`
+- `my-app/.env.example`
+- `my-app/.gitignore`
 
 ## Acceptance criteria
 - [ ] Update README feature/runtime summaries to reflect the English UI, current dataset availability, Random Forest API and separate Study Planner.
