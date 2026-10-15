@@ -78,7 +78,7 @@ This log records AI-assisted work, implementation changes, and verification perf
 - **Work:** Publish only `README.md`, `personas.md`, and `SPRINT_01.md` to branch `thanh`, as requested.
 - **Changes:** Fetched `origin/thanh` and created an isolated worktree from its latest commit because the remote had a new README update and the main workspace contained many unrelated staged files. Copied the three requested documents into that worktree and committed them together.
 - **Commit:** `ff3af5b` — `Update project docs with features, personas, and sprint 1 plan`.
-- **Validation:** Checked the staged documentation diff and confirmed the commit contained exactly the three requested paths under `my-app/`. Git reported a successful push to `origin/thanh`.
+- **Validation:** Checked the staged documentation diff and confirmed the commit contained exactly the three requested document paths. Git reported a successful push to `origin/thanh`.
 - **Result:** The three documents were published. The main workspace's staged code changes were preserved. `AI_LOG.md` was not included in that push.
 
 ## AI Log Consolidation — 2026-10-08
@@ -117,3 +117,11 @@ This log records AI-assisted work, implementation changes, and verification perf
 - **Planning:** Proposed 19 story points and a two-week duration; no due date or assignees set without team agreement. Local implementation evidence is explicitly distinguished from merged/accepted work; all issues remain open.
 - **Validation:** Read back all eight issues through GitHub API and verified open state and milestone membership. No application tests were rerun for this documentation-only task.
 - **Result:** GitHub sprint issues are published. Local documentation and application changes have not been committed or pushed by this task.
+
+
+## 2026-10-15 ? Repository layout cleanup
+
+- Moved the application, backend, datasets and documentation to the repository root.
+- Updated documented paths and renamed the npm package to `studentai`.
+- Consolidated package manifests and ignore rules; local environment settings and generated artifacts remain ignored.
+- Validation after relocation: production build, ESLint and all 32 automated tests passed from the repository root.

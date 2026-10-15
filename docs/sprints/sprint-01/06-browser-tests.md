@@ -14,11 +14,11 @@ As a student or adviser, I want the application to work on desktop and mobile wi
 Local build and ESLint passed; API/client checks cover predictions and planner errors. The English sage/mint UI is implemented, but a full browser visual/accessibility verification has not been performed. Demo login is in-memory and does not implement student/teacher roles.
 
 ## Relevant files
-- `my-app/frontend/homepage.jsx`
-- `my-app/frontend/detect.jsx`
-- `my-app/frontend/study-planner.jsx`
-- `my-app/frontend/login.jsx`
-- `my-app/src/main.jsx`
+- `frontend/homepage.jsx`
+- `frontend/detect.jsx`
+- `frontend/study-planner.jsx`
+- `frontend/login.jsx`
+- `src/main.jsx`
 
 ## Acceptance criteria
 - [ ] Verify homepage navigation, /detect, /study-planner, /login and unknown-route behavior.

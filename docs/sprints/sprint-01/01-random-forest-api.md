@@ -14,11 +14,11 @@ As a student, I want a final-grade estimate from my profile so that I can discus
 Implemented locally: shared 30-feature contract, preprocessing + 200-tree RandomForestRegressor, train/save command, health endpoint, and prediction endpoint. The latest local run used 519 training and 130 test records (MAE 2.021, RMSE 2.767, R² 0.215). Seven Python integration tests passed. This is local evidence, not a claim that these changes are merged.
 
 ## Relevant files
-- `my-app/backend/model/features.py`
-- `my-app/backend/model/train_model.py`
-- `my-app/backend/model/save_model.py`
-- `my-app/backend/model/student_model.metrics.json`
-- `my-app/backend/app/app.py`
+- `backend/model/features.py`
+- `backend/model/train_model.py`
+- `backend/model/save_model.py`
+- `backend/model/student_model.metrics.json`
+- `backend/app/app.py`
 
 ## Acceptance criteria
 - [ ] Train from data/student-por.csv using npm run train:model, with paths independent of the shell working directory.
